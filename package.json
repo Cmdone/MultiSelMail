@@ -1,0 +1,27 @@
+{
+  "name": "multiple_select_mailaddress",
+  "version": "1.0.0",
+  "description": "支持多选的邮件自动补全提示插件",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Cmd-Cmd/MultiSelMail/"
+  },
+  "keywords": [
+    "邮件地址",
+    "补全",
+    "多选",
+    "自定义",
+    "插件"
+  ],
+  "author": "Cmd",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-css": "^3.4.20",
+    "node-smushit": "^0.5.1",
+    "uglify-js": "^2.7.4"
+  }
+}
