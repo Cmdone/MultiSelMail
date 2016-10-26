@@ -45,7 +45,7 @@ $.fn.multiSelMail = function(optIn) {
     cancelArrow: false,
     clickLabelFunc: undefined
   };
-  $.extend(opt, optIn);
+  $.extend(true, opt, optIn);
 
   var controller = new MultiSelMail(this); // 初始化对象
 
@@ -55,7 +55,7 @@ $.fn.multiSelMail = function(optIn) {
 
   // 输入框获得焦点
   controller.inp.on('focus input', function() {
-    controller.showBox();
+    showBox();
   });
 
   // 点击区域非输入框或下拉框
@@ -66,7 +66,7 @@ $.fn.multiSelMail = function(optIn) {
     return false;
   });
   $(document).on('click', function() {
-    controller.hideBox();
+    hideBox();
   });
 
   // 自动提示
@@ -86,7 +86,7 @@ $.fn.multiSelMail = function(optIn) {
         addMailLabel($(this).val().trim());
       }
     } else if (!opt.cancelEsc && e.keyCode == 27) { // ESC
-      controller.hideBox();
+      hideBox();
     } else {
       renderList($(this).val()); // 渲染选择表
     }
@@ -94,8 +94,12 @@ $.fn.multiSelMail = function(optIn) {
 
   // 下拉待选项 - 鼠标覆盖
   controller.list.on('mouseover', 'li.selMailOne', function() {
-    controller.list.find('li.selMailOne').removeClass('ready');
-    $(this).addClass('ready');
+    controller.list.find('li.selMailOne')
+                   .removeClass('ready')
+                   .removeClass(opt.style.listItemReady.class)
+                   .removeAttr('style');
+    $(this).addClass('ready ' + opt.style.listItemReady.class)
+          .css(opt.style.listItemReady.css);
     // 寻找序号
     var temp = $(this).attr('data-mail');
     if (temp != undefined) {
@@ -143,7 +147,7 @@ $.fn.multiSelMail = function(optIn) {
 
   // 添加新标签
   function addMailLabel(str, inx) {
-    controller.hideBox();
+    hideBox();
     if (!confirmMail(str)) {
       opt.confirmFailFun(str);
       if (opt.single) {
@@ -262,6 +266,20 @@ $.fn.multiSelMail = function(optIn) {
     }
   }
 
+  // 下拉框弹出
+  function showBox() {
+    controller.list.css('display', 'block');
+  };
+
+  // 下拉框隐藏
+  function hideBox() {
+    controller.list.css('display', 'none').html('');
+    if (!opt.single) {
+      controller.inp.val('');
+    }
+    selInx = -1;
+  };
+
   // 初始化控件对象
   function MultiSelMail(con) {
     this.container = con.addClass('selMailContainer'); // 容器
@@ -269,7 +287,7 @@ $.fn.multiSelMail = function(optIn) {
     if (opt.labelConId != '' && $('#' + opt.labelConId).length == 1) {
       this.labels = $('#' + opt.labelConId);
     } else {
-      this.labels = $('<div>').addClass('selMailLabel' + opt.style.label.class)
+      this.labels = $('<div>').addClass('selMailLabel ' + opt.style.label.class)
                               .css(opt.style.label.css);
     }
 
@@ -290,16 +308,6 @@ $.fn.multiSelMail = function(optIn) {
     this.container.append(this.list)
                   .append(this.inp);
   }
-  MultiSelMail.prototype.showBox = function() { // 下拉框弹出
-    this.list.css('display', 'block');
-  };
-  MultiSelMail.prototype.hideBox = function() { // 下拉框隐藏
-    this.list.css('display', 'none').html('');
-    if (!opt.single) {
-      this.inp.val('');
-    }
-    selInx = -1;
-  };
   MultiSelMail.prototype.getMails = function() { // 获得已选所有标签
     return seledMail;
   };
@@ -349,7 +357,13 @@ $.fn.multiSelMail = function(optIn) {
     }
     str1 = parseInt(str1);
     if (str1 >= 0 && str1 < seledMail.length) {
-      this.spliceMail(str1, 1, str2);
+      if (!confirmMail(str2)) {
+        opt.confirmFailFun(str2);
+      } else if (seledMail.indexOf(str2) != -1) {
+        opt.confirmFailRep(str2);
+      } else {
+        this.spliceMail(str1, 1, str2);
+      }
     }
   };
 
