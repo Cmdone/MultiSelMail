@@ -1,7 +1,6 @@
 const fs = require('fs');
 const uglifJs = require('uglify-js');
 const CleanCss = require('clean-css');
-const smushit = require('node-smushit');
 
 // uglifyjs - 压缩js文件
 let jsresult = uglifJs.minify('./source/multiSelMail.js');

@@ -20,7 +20,7 @@ $('#example').multiSelMail();
 关键说明1: **需要使用一个块级元素来初始化，且将会清空这个块级元素内容，之后输入框会占满整个元素，所以建议一开始固定好此块级元素高宽**  
 关键说明2: **已选择的标签容器是绝对定位于输入框下的，难免会与输入框下原本的内容发生重叠，建议流出一定空白区域，最好能自定义一下这个标签容器**  
 
-[查看更多示例](http://htmlpreview.github.com/?https://github.com/Cmd-Cmd/MultiSelMail/blob/master/index.html)
+[查看更多示例](https://cmd-cmd.github.io/MultiSelMail/)
 
 ## 全部功能
 
